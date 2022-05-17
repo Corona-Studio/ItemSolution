@@ -1,0 +1,11 @@
+name: ItemSolution
+version: 1.0 # the plugin's version
+author: Leon
+main: top.leonx.itemsolution.ItemSolution
+api-version: 1.13
+description: Item Solution plugin
+commands:
+  itemsolution:
+    description: "Clear the items in world"
+    usage: /<command> [reload|clear]
+    permission: itemsolution.command
