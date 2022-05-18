@@ -6,6 +6,8 @@ api-version: 1.13
 description: Item Solution plugin
 commands:
   itemsolution:
+    aliases:
+      - itemso
     description: "Clear the items in world"
     usage: /<command> [reload|clear]
     permission: itemsolution.command
