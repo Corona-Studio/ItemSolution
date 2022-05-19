@@ -121,6 +121,20 @@ public class ItemSolutionEventHandler implements Listener {
         world.getPlayers().forEach(player -> player.sendMessage(finishMessage));
     }
 
+    /**
+     * Start the clear task, and save the task to the map
+     * The task will count down the time, and when the time is up, start cleaning
+     * The task will be cancelled and remove from the map when the task is finished
+     * @param world The world to be cleaned
+     */
+    public void StartClearTask(World world){
+        BukkitScheduler scheduler = Bukkit.getScheduler();
+        var task = scheduler.runTaskTimer(ItemSolution.getInstance(), new ClearItemRunnable(world),
+                                          0L, 20L);
+
+        itemClearTasks.put(world, task);
+    }
+
     private final class CheckItemRunnable implements Runnable {
         private final World world;
 
@@ -140,14 +154,7 @@ public class ItemSolutionEventHandler implements Listener {
                     return;
                 }
                 ItemSolution.logger.info(String.format("Starting clean task for world %s", world.getName()));
-                // Start the clear task, and save the task to the map
-                // The task will count down the time, and when the time is up, start cleaning
-                // The task will be cancelled and remove from the map when the task is finished
-                BukkitScheduler scheduler = Bukkit.getScheduler();
-                var task = scheduler.runTaskTimer(ItemSolution.getInstance(), new ClearItemRunnable(world),
-                        0L, 20L);
-
-                itemClearTasks.put(world, task);
+                StartClearTask(world);
             }
         }
     }
@@ -173,14 +180,14 @@ public class ItemSolutionEventHandler implements Listener {
             int cdFirstEnd = setting.cdFirstEndTime;
             int cdFirstInterval = setting.cdFirstInterval;
 
-            // Within the time of the first countdown message, send the first count down message
+            // Within the time of the first countdown message, send the first count-down message
             if(remaining <= cdFirstStart && remaining >= cdFirstEnd
                 &&(remaining - cdFirstEnd)% cdFirstInterval == 0){
                 var message = ChatColor.RED + setting.cdFirstMessage.replaceAll("%time%", String.valueOf(remaining));
                 world.getPlayers().forEach(player -> player.sendMessage(message));
             }
 
-            // Within the time of the second countdown message, send the second count down message
+            // Within the time of the second countdown message, send the second count-down message
             int cdSecondStart = setting.cdSecondStartTime;
             int cdSecondEnd = setting.cdSecondEndTime;
             int cdSecondInterval = setting.cdSecondInterval;

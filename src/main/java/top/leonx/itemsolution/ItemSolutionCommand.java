@@ -6,6 +6,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Objects;
+
 public class ItemSolutionCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -20,6 +22,16 @@ public class ItemSolutionCommand implements CommandExecutor {
                 World world = player.getWorld();
                 ItemSolutionEventHandler.DoClearWorldItem(world);
                 sender.sendMessage("Cleared");
+                return true;
+            }
+        }else if(args.length==2){
+            if(Objects.equals(args[0], "debug")){
+                if(sender instanceof Player player){
+                    if(args[1].equals("cd")){
+                        ItemSolution.getClearItemEventHandler().StartClearTask(player.getWorld());
+                        return true;
+                    }
+                }
             }
         }
         return false;
